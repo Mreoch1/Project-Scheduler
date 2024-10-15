@@ -6,6 +6,8 @@ interface ContractorListProps {
 }
 
 const ContractorList: React.FC<ContractorListProps> = ({ contractors }) => {
+  console.log('Contractors in ContractorList:', contractors);
+
   return (
     <div className="mt-8">
       <h3 className="text-xl font-bold mb-4">Contractors</h3>

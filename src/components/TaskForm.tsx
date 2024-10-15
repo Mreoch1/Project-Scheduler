@@ -72,6 +72,7 @@ const TaskForm: React.FC = () => {
         projectId: projectId,
       });
 
+      console.log('Task added successfully'); // Add this line for debugging
       navigate(`/calendar/${projectId}`);
     } catch (error) {
       setError('Failed to create task');

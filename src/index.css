@@ -1,3 +1,604 @@
+/* eslint-disable */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* eslint-enable */
+
+@media print {
+  .print\:hidden {
+    display: none !important;
+  }
+}
+
+/* Add these styles to the end of your existing CSS */
+.rbc-event {
+  padding: 1px 3px;
+  font-size: 9px;
+  line-height: 1.2;
+  border-radius: 2px;
+  border: none;
+  background-color: #3174ad;
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rbc-event-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rbc-day-slot .rbc-event {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.rbc-month-view .rbc-date-cell {
+  text-align: center;
+  padding: 5px;
+}
+
+.rbc-month-view .rbc-day-bg {
+  padding: 5px;
+}
+
+.rbc-month-view .rbc-row-content {
+  z-index: 1;
+  max-height: 100%;
+  overflow-y: visible;
+}
+
+.rbc-month-view .rbc-row-segment {
+  padding: 0 1px 1px 1px;
+}
+
+.rbc-day-slot .rbc-events-container {
+  margin-right: 0;
+}
+
+.rbc-month-view .rbc-month-row {
+  overflow-y: visible;
+  max-height: none;
+}
+
+.rbc-header {
+  padding: 10px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+
+.rbc-toolbar-label {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.rbc-month-view {
+  flex: 1;
+  width: 100%;
+  border: 1px solid #ddd;
+  overflow: visible;
+}
+
+.rbc-month-row {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  overflow: hidden;
+  min-height: 100px;
+}
+
+.rbc-row-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.rbc-date-cell {
+  flex-grow: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.rbc-event {
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
+.rbc-month-view .rbc-month-row {
+  overflow: visible;
+  flex: 1 0 auto;
+}
+
+.rbc-row-bg {
+  display: flex;
+  flex-direction: row;
+  flex: 1 0 auto;
+}
+
+.rbc-day-bg {
+  flex: 1 0 0%;
+}
+
+.rbc-off-range-bg {
+  background-color: #f8f8f8;
+}
+
+.more-tasks {
+  font-style: italic;
+}
+
+.rbc-month-view, .rbc-month-row, .rbc-row-content {
+  overflow: visible !important;
+}
+
+.rbc-month-row {
+  min-height: 100px;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+}
+
+.weekdays {
+  display: flex;
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.weekdays > div {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+}
+
+.week {
+  display: flex;
+  min-height: 100px;
+}
+
+.day-cell {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 5px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.other-month {
+  background-color: #f9f9f9;
+  color: #999;
+}
+
+.day-number {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.holiday-marker {
+  background-color: red;
+  color: white;
+  padding: 2px;
+  font-size: 10px;
+  margin-bottom: 2px;
+  border-radius: 2px;
+}
+
+.task-marker {
+  color: white;
+  border-radius: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  padding: 2px 4px;
+  margin-bottom: 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 28px;
+}
+
+.task-marker .font-bold {
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.task-marker .task-description {
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+@media print {
+  .task-marker {
+    font-size: 8px !important;
+    min-height: 20px !important;
+  }
+
+  .task-marker .task-description {
+    font-size: 7px !important;
+  }
+}
+
+/* Remove or comment out these styles */
+/*
+.delete-task {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 12px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-task:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+*/
+
+.rbc-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.rbc-row-bg {
+  display: flex;
+  flex-direction: row;
+  flex: 1 0 0%;
+  overflow: hidden;
+}
+
+.rbc-day-bg {
+  flex: 1 0 0%;
+}
+
+.rbc-off-range-bg {
+  background-color: #f8f8f8;
+}
+
+.more-tasks {
+  font-style: italic;
+}
+
+.rbc-month-view, .rbc-month-row, .rbc-row-content {
+  overflow: visible !important;
+}
+
+.rbc-month-row {
+  min-height: 100px;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+}
+
+.weekdays {
+  display: flex;
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.weekdays > div {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+}
+
+.week {
+  display: flex;
+  min-height: 100px;
+}
+
+.day-cell {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 5px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.other-month {
+  background-color: #f9f9f9;
+  color: #999;
+}
+
+.day-number {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.holiday-marker {
+  background-color: red;
+  color: white;
+  padding: 2px;
+  font-size: 10px;
+  margin-bottom: 2px;
+  border-radius: 2px;
+}
+
+.task-marker {
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.calendar-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-controls button {
+  background-color: #4a5568;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+}
+
+.pdf-calendar {
+  font-size: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.pdf-calendar .calendar {
+  border: 1px solid #ddd;
+}
+
+.pdf-calendar .weekdays {
+  display: flex;
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.pdf-calendar .weekdays > div {
+  flex: 1;
+  text-align: center;
+  padding: 5px;
+}
+
+.pdf-calendar .week {
+  display: flex;
+  min-height: 80px;
+}
+
+.pdf-calendar .day-cell {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 2px;
+  min-height: 80px;
+  overflow: hidden;
+}
+
+.pdf-calendar .day-number {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.pdf-calendar .holiday-marker {
+  background-color: red;
+  color: white;
+  padding: 1px;
+  font-size: 8px;
+  margin-bottom: 1px;
+  border-radius: 2px;
+}
+
+.pdf-calendar .task-marker {
+  color: white;
+  padding: 1px;
+  font-size: 8px;
+  margin-bottom: 1px;
+  border-radius: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media print {
+  .container {
+    width: 100%;
+    max-width: none;
+  }
+
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .calendar {
+    page-break-inside: avoid;
+  }
+
+  .day-cell {
+    min-height: 120px; /* Increase the minimum height for PDF */
+  }
+
+  .task-marker {
+    font-size: 10px !important;
+    padding: 3px 5px !important;
+    margin-bottom: 2px !important;
+    min-height: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .task-marker .task-description {
+    font-size: 7px !important;
+  }
+
+  .holiday-marker {
+    font-size: 10px !important;
+    padding: 1px 2px !important;
+  }
+}
+
+/* Add these styles if they're not already present */
+.calendar {
+  border: 1px solid #ccc;
+  min-height: 500px;
+}
+
+.week {
+  display: flex;
+  min-height: 100px;
+}
+
+.day-cell {
+  flex: 1;
+  border: 1px solid #eee;
+  padding: 5px;
+  min-height: 100px;
+}
+
+.weekdays {
+  display: flex;
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.weekdays > div {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+}
+
+.day-cell.holiday {
+  background-color: #ffebee;
+}
+
+.holiday-marker {
+  background-color: #ff5252;
+  color: white;
+  padding: 2px 4px;
+  font-size: 12px;
+  margin-bottom: 4px;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.task-marker {
+  color: white;
+  border-radius: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  padding: 2px 4px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: flex-start;
+  min-height: 24px;
+}
+
+.calendar-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+}
+
+.weekdays {
+  display: flex;
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.weekdays > div {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+}
+
+.week {
+  display: flex;
+  min-height: 120px;
+}
+
+.day-cell {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 5px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tasks-container {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.day-cell.holiday {
+  background-color: #ffebee;
+}
+
+.holiday-marker {
+  background-color: #ff5252;
+  color: white;
+  padding: 2px 4px;
+  font-size: 11px;
+  margin-bottom: 4px;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+@media print {
+  .calendar-container {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .day-cell {
+    min-height: 100px !important;
+  }
+
+  .task-marker {
+    font-size: 10px !important;
+    padding: 2px 4px !important;
+    margin-bottom: 1px !important;
+    min-height: 16px !important;
+  }
+
+  .holiday-marker {
+    font-size: 10px !important;
+    padding: 1px 2px !important;
+  }
+}

@@ -1,0 +1,73 @@
+Project Scheduler - Guidelines and Progress
+
+1. Project Overview:
+   - A web-based project scheduling tool built with React, TypeScript, and Firebase.
+   - Allows users to manage projects, tasks, contractors, and holidays.
+
+2. Key Features:
+   - User authentication (login, register, logout)
+   - Project management (create, view, delete projects)
+   - Task management (create, edit, delete tasks)
+   - Custom calendar view for tasks and holidays
+   - Contractor management
+   - Holiday management
+   - Notes for projects
+   - PDF export of calendar
+
+3. Technology Stack:
+   - Frontend: React with TypeScript
+   - Backend: Firebase (Firestore for database, Authentication for user management)
+   - State Management: React Context API
+   - Routing: React Router
+   - Styling: Tailwind CSS
+   - Build Tool: Vite
+
+4. Current Progress:
+   - Implemented basic project structure
+   - Set up Firebase integration
+   - Created components for authentication, project management, and calendar view
+   - Implemented custom calendar component
+   - Added task creation, editing, and deletion functionality
+   - Integrated contractor management
+   - Added holiday management
+   - Implemented notes feature for projects
+   - Added PDF export functionality for calendar view
+   - Improved task display in calendar view (name and description side by side)
+   - Fixed issues with task updates and deletions
+
+5. Recent Changes:
+   - Switched from react-big-calendar to a custom calendar implementation
+   - Improved task display in calendar cells (name and description)
+   - Fixed issues with task updates not reflecting immediately in the calendar
+   - Implemented real-time updates for notes
+   - Adjusted PDF export to better handle multiple tasks and holidays
+
+6. Next Steps:
+   - Implement drag-and-drop functionality for tasks in the calendar view
+   - Add unit tests for critical components
+   - Optimize performance, especially for projects with many tasks
+   - Implement more robust error handling
+   - Consider adding a weekly or daily view option for the calendar
+
+7. Code Organization:
+   - Components are stored in the src/components directory
+   - Context providers are in src/contexts
+   - Firebase configuration is in src/firebase.ts
+   - Types are defined in src/types.ts
+
+8. Styling Guidelines:
+   - Use Tailwind CSS classes for styling
+   - Custom CSS should be added to src/index.css when necessary
+
+9. Best Practices:
+   - Use TypeScript for type safety
+   - Implement error handling for all asynchronous operations
+   - Keep components small and focused on a single responsibility
+   - Use React hooks for state management and side effects
+   - Follow the principle of lifting state up when necessary
+
+10. Deployment:
+    - The application is currently set up for development using Vite
+    - For production, build the app using 'npm run build' and deploy the resulting 'dist' folder
+
+This document will be updated as the project progresses and new features or changes are implemented.

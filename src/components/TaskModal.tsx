@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Task, Contractor, Holiday } from '../types';
+import { doc, updateDoc, deleteDoc, Timestamp } from 'firebase/firestore';
+import { db } from '../firebase';
 
 interface TaskModalProps {
   task: Task;
@@ -7,10 +9,11 @@ interface TaskModalProps {
   contractors: Contractor[];
   projectId: string;
   onUpdate: (updatedTask: Task) => void;
+  onDelete: (taskId: string) => void;
   holidays: Holiday[];
 }
 
-const TaskModal: React.FC<TaskModalProps> = ({ task, onClose, contractors, projectId, onUpdate, holidays }) => {
+const TaskModal: React.FC<TaskModalProps> = ({ task, onClose, contractors, projectId, onUpdate, onDelete, holidays }) => {
   const [name, setName] = useState(task.name);
   const [description, setDescription] = useState(task.description);
   const [date, setDate] = useState(task.start.toISOString().split('T')[0]);
@@ -39,17 +42,45 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, onClose, contractors, proje
       ...task,
       name,
       description,
+      date: selectedDate,
       start: selectedDate,
       end: selectedDate,
       contractorId,
     };
-    onUpdate(updatedTask);
+
+    try {
+      const taskRef = doc(db, 'tasks', task.id);
+      await updateDoc(taskRef, {
+        ...updatedTask,
+        date: Timestamp.fromDate(selectedDate),
+        start: Timestamp.fromDate(selectedDate),
+        end: Timestamp.fromDate(selectedDate),
+      });
+      onUpdate(updatedTask);
+      onClose();
+    } catch (error) {
+      console.error('Error updating task:', error);
+      setError('Failed to update task. Please try again.');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      try {
+        await deleteDoc(doc(db, 'tasks', task.id));
+        onDelete(task.id);
+        onClose();
+      } catch (error) {
+        console.error('Error deleting task:', error);
+        setError('Failed to delete task. Please try again.');
+      }
+    }
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-4">{task.id ? 'Edit Task' : 'Create Task'}</h2>
+        <h2 className="text-2xl font-bold mb-4">Edit Task</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -100,7 +131,10 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, onClose, contractors, proje
           </div>
           <div className="flex justify-between">
             <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-              {task.id ? 'Update' : 'Create'}
+              Update
+            </button>
+            <button type="button" onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded">
+              Delete
             </button>
             <button type="button" onClick={onClose} className="bg-gray-300 text-black px-4 py-2 rounded">
               Cancel

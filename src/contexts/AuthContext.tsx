@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth } from '../firebase';
-import { User, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { User, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential } from 'firebase/auth';
 
 interface AuthContextType {
   currentUser: User | null;
-  signup: (email: string, password: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string) => Promise<UserCredential>;
+  login: (email: string, password: string) => Promise<UserCredential>;
   logout: () => Promise<void>;
 }
 
