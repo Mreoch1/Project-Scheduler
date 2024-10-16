@@ -44,7 +44,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
+    <div className="max-w-md mx-auto mt-10 relative">
       <h2 className="text-2xl font-bold mb-4">Login</h2>
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <form onSubmit={handleSubmit}>
@@ -77,6 +77,9 @@ const Login: React.FC = () => {
       <p className="mt-4">
         Don't have an account? <Link to="/register" className="text-blue-500">Register here</Link>
       </p>
+      <div className="absolute bottom-0 right-0 text-xs text-gray-500">
+        V.10.16.24
+      </div>
     </div>
   );
 };

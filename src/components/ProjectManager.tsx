@@ -146,7 +146,7 @@ const ProjectManager: React.FC = () => {
                 </Link>
                 <p className="text-sm text-gray-500">
                   Created on: {project.createdAt.toLocaleDateString()}
-                  {project.createdBy !== currentUser?.uid && " (Group Project)"}
+                  {project.createdBy !== currentUser?.uid && " (Shared Project)"}
                 </p>
               </div>
               {project.createdBy === currentUser?.uid && (

@@ -20,8 +20,9 @@ const TaskForm: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (currentUser) {
-        const contractorsQuery = query(collection(db, 'contractors'), where('userId', '==', currentUser.uid));
-        const holidaysQuery = query(collection(db, 'holidays'), where('userId', '==', currentUser.uid));
+        const userDomain = currentUser.email?.split('@')[1] || '';
+        const contractorsQuery = query(collection(db, 'contractors'), where('domain', '==', userDomain));
+        const holidaysQuery = query(collection(db, 'holidays'), where('domain', '==', userDomain));
 
         const [contractorsSnapshot, holidaysSnapshot] = await Promise.all([
           getDocs(contractorsQuery),
@@ -53,7 +54,10 @@ const TaskForm: React.FC = () => {
       return;
     }
 
-    const taskDate = new Date(date);
+    // Create a date object in UTC
+    const taskDate = new Date(date + 'T12:00:00Z');
+
+    console.log('Task date (UTC):', taskDate.toISOString());
 
     const conflictingHoliday = checkHolidayConflict(taskDate);
 
@@ -72,7 +76,7 @@ const TaskForm: React.FC = () => {
         projectId: projectId,
       });
 
-      console.log('Task added successfully'); // Add this line for debugging
+      console.log('Task added successfully');
       navigate(`/calendar/${projectId}`);
     } catch (error) {
       setError('Failed to create task');

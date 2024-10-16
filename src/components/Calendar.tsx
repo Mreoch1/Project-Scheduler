@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import moment from 'moment';
 import { useAuth } from '../contexts/AuthContext';
+import { useContractors } from '../contexts/ContractorContext';
 import { db } from '../firebase';
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
-import { Task, Contractor, Holiday } from '../types';
+import { collection, query, where, getDocs, doc, getDoc, Timestamp } from 'firebase/firestore';
+import { Task, Holiday } from '../types';
 import TaskModal from './TaskModal';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -13,12 +14,12 @@ import ContractorList from './ContractorList';
 
 const Calendar: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [contractors, setContractors] = useState<Contractor[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [holidays, setHolidays] = useState<Holiday[]>([]);
   const [projectName, setProjectName] = useState<string>('');
   const [showNotes, setShowNotes] = useState(false);
   const { currentUser } = useAuth();
+  const { contractors } = useContractors();
   const { projectId } = useParams<{ projectId: string }>();
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -40,18 +41,15 @@ const Calendar: React.FC = () => {
             console.log('Project found:', projectData.name);
 
             const tasksQuery = query(collection(db, 'tasks'), where('projectId', '==', projectId));
-            const contractorsQuery = query(collection(db, 'contractors'), where('userId', '==', currentUser.uid));
-            const holidaysQuery = query(collection(db, 'holidays'), where('userId', '==', currentUser.uid));
+            const holidaysQuery = query(collection(db, 'holidays'), where('domain', '==', currentUser.email?.split('@')[1] || ''));
 
-            console.log('Fetching tasks, contractors, and holidays...');
-            const [tasksSnapshot, contractorsSnapshot, holidaysSnapshot] = await Promise.all([
+            console.log('Fetching tasks and holidays...');
+            const [tasksSnapshot, holidaysSnapshot] = await Promise.all([
               getDocs(tasksQuery),
-              getDocs(contractorsQuery),
               getDocs(holidaysQuery)
             ]);
 
             console.log('Tasks snapshot size:', tasksSnapshot.size);
-            console.log('Contractors snapshot size:', contractorsSnapshot.size);
             console.log('Holidays snapshot size:', holidaysSnapshot.size);
 
             const fetchedTasks = tasksSnapshot.docs.map(doc => {
@@ -66,10 +64,6 @@ const Calendar: React.FC = () => {
             });
             setTasks(fetchedTasks);
             console.log('Fetched tasks:', fetchedTasks);
-
-            const fetchedContractors = contractorsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Contractor));
-            setContractors(fetchedContractors);
-            console.log('Fetched contractors:', fetchedContractors);
 
             setHolidays(holidaysSnapshot.docs.map(doc => {
               const data = doc.data();
@@ -157,8 +151,17 @@ const Calendar: React.FC = () => {
     let week = [];
 
     for (let day = startDate.clone(); day.isBefore(endDate); day.add(1, 'day')) {
-      const tasksForDay = tasks.filter(task => moment(task.start).isSame(day, 'day'));
-      const holidayForDay = holidays.find(holiday => moment(holiday.date).isSame(day, 'day'));
+      const tasksForDay = tasks.filter(task => {
+        const taskDate = task.date instanceof Timestamp ? task.date.toDate() : new Date(task.date);
+        const taskMoment = moment.utc(taskDate).startOf('day');
+        const dayMoment = day.clone().utc().startOf('day');
+        const isSameDay = taskMoment.isSame(dayMoment);
+        console.log('Comparing task date:', taskDate.toUTCString(), 'with calendar day:', day.toDate().toUTCString(), 'Result:', isSameDay);
+        return isSameDay;
+      });
+      const holidayForDay = holidays.find(holiday => 
+        moment.utc(holiday.date).startOf('day').isSame(day.clone().utc().startOf('day'))
+      );
 
       week.push(renderCalendarDay(day, tasksForDay, holidayForDay, isPDF));
 

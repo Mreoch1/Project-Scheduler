@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Task, Contractor, Holiday } from '../types';
 import { doc, updateDoc, deleteDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase';
+import moment from 'moment';
 
 interface TaskModalProps {
   task: Task;
@@ -31,8 +32,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ task, onClose, contractors, proje
     e.preventDefault();
     setError('');
 
-    const selectedDate = new Date(date);
-    const holiday = holidays.find(h => h.date.toDateString() === selectedDate.toDateString());
+    const selectedDate = new Date(date + 'T12:00:00Z');
+
+    console.log('Updating task with date:', selectedDate.toISOString());
+
+    const holiday = holidays.find(h => moment.utc(h.date).startOf('day').isSame(moment.utc(selectedDate).startOf('day')));
     if (holiday) {
       setError(`Cannot schedule on holiday: ${holiday.name}`);
       return;

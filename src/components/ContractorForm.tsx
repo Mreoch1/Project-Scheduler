@@ -1,31 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useContractors } from '../contexts/ContractorContext';
 import { db } from '../firebase';
-import { collection, addDoc, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import { Contractor } from '../types';
 
 const ContractorForm: React.FC = () => {
   const [name, setName] = useState('');
   const [color, setColor] = useState('#000000');
   const [error, setError] = useState('');
-  const [contractors, setContractors] = useState<Contractor[]>([]);
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchContractors();
-  }, [currentUser]);
-
-  const fetchContractors = async () => {
-    if (currentUser) {
-      const q = query(collection(db, 'contractors'), where('userId', '==', currentUser.uid));
-      const querySnapshot = await getDocs(q);
-      const fetchedContractors = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Contractor));
-      setContractors(fetchedContractors);
-      console.log('Fetched contractors:', fetchedContractors);
-    }
-  };
+  const { contractors, setContractors } = useContractors();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,16 +22,18 @@ const ContractorForm: React.FC = () => {
     }
 
     try {
+      const userDomain = currentUser.email?.split('@')[1] || '';
       const newContractor = {
         name,
         color,
         userId: currentUser.uid,
+        domain: userDomain,
       };
       const docRef = await addDoc(collection(db, 'contractors'), newContractor);
-      console.log('New contractor added:', { id: docRef.id, ...newContractor });
+      const addedContractor = { id: docRef.id, ...newContractor };
+      setContractors(prevContractors => [...prevContractors, addedContractor]);
       setName('');
       setColor('#000000');
-      fetchContractors(); // Refresh the list after adding
     } catch (error) {
       console.error('Error adding contractor:', error);
       setError('Failed to create contractor');
@@ -56,8 +43,7 @@ const ContractorForm: React.FC = () => {
   const deleteContractor = async (id: string) => {
     try {
       await deleteDoc(doc(db, 'contractors', id));
-      console.log('Contractor deleted:', id);
-      fetchContractors(); // Refresh the list after deleting
+      setContractors(prevContractors => prevContractors.filter(c => c.id !== id));
     } catch (error) {
       console.error('Error deleting contractor:', error);
       setError('Failed to delete contractor');
@@ -97,25 +83,29 @@ const ContractorForm: React.FC = () => {
       </form>
 
       <h3 className="text-xl font-bold mb-4">Contractor List</h3>
-      <ul>
-        {contractors.map((contractor) => (
-          <li key={contractor.id} className="flex items-center justify-between bg-white shadow-md rounded-lg p-4 mb-4">
-            <div className="flex items-center">
-              <div
-                className="w-6 h-6 rounded-full mr-4"
-                style={{ backgroundColor: contractor.color }}
-              ></div>
-              <span>{contractor.name}</span>
-            </div>
-            <button
-              onClick={() => deleteContractor(contractor.id)}
-              className="bg-red-500 text-white px-2 py-1 rounded"
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+      {contractors.length === 0 ? (
+        <p>No contractors added yet. Create a new contractor above.</p>
+      ) : (
+        <ul>
+          {contractors.map((contractor) => (
+            <li key={contractor.id} className="flex items-center justify-between bg-white shadow-md rounded-lg p-4 mb-4">
+              <div className="flex items-center">
+                <div
+                  className="w-6 h-6 rounded-full mr-4"
+                  style={{ backgroundColor: contractor.color }}
+                ></div>
+                <span>{contractor.name}</span>
+              </div>
+              <button
+                onClick={() => deleteContractor(contractor.id)}
+                className="bg-red-500 text-white px-2 py-1 rounded"
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

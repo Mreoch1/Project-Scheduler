@@ -21,7 +21,8 @@ const HolidayManager: React.FC = () => {
 
   const fetchHolidays = async () => {
     if (currentUser) {
-      const q = query(collection(db, 'holidays'), where('userId', '==', currentUser.uid));
+      const userDomain = currentUser.email?.split('@')[1] || '';
+      const q = query(collection(db, 'holidays'), where('domain', '==', userDomain));
       const querySnapshot = await getDocs(q);
       const fetchedHolidays = querySnapshot.docs.map(doc => {
         const data = doc.data();
@@ -54,10 +55,12 @@ const HolidayManager: React.FC = () => {
           h.date.toDateString() === holiday.date.toDateString()
         );
         if (!existingHoliday) {
+          const userDomain = currentUser.email?.split('@')[1] || '';
           const holidayDoc = await addDoc(collection(db, 'holidays'), {
             name: holiday.name,
             date: holiday.date,
             userId: currentUser.uid,
+            domain: userDomain,
           });
           newHolidays.push({ id: holidayDoc.id, ...holiday });
         }
@@ -75,10 +78,12 @@ const HolidayManager: React.FC = () => {
         h.date.toDateString() === newDate.toDateString()
       );
       if (!existingHoliday) {
+        const userDomain = currentUser.email?.split('@')[1] || '';
         const holidayDoc = await addDoc(collection(db, 'holidays'), {
           name: newHolidayName,
           date: newDate,
           userId: currentUser.uid,
+          domain: userDomain,
         });
         setHolidays([...holidays, { id: holidayDoc.id, name: newHolidayName, date: newDate }]);
         setNewHolidayName('');
