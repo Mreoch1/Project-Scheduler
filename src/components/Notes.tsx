@@ -8,6 +8,7 @@ interface Note {
   id: string;
   content: string;
   timestamp: Date;
+  domain: string;
 }
 
 interface NotesProps {
@@ -22,9 +23,10 @@ const Notes: React.FC<NotesProps> = ({ projectId, readOnly = false }) => {
 
   useEffect(() => {
     if (currentUser && projectId) {
+      const userDomain = currentUser.email?.split('@')[1] || '';
       const q = query(
         collection(db, 'notes'),
-        where('userId', '==', currentUser.uid),
+        where('domain', '==', userDomain),
         where('projectId', '==', projectId)
       );
 
@@ -44,11 +46,13 @@ const Notes: React.FC<NotesProps> = ({ projectId, readOnly = false }) => {
   const addNote = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newNote.trim() && currentUser && projectId) {
+      const userDomain = currentUser.email?.split('@')[1] || '';
       await addDoc(collection(db, 'notes'), {
         content: newNote,
         timestamp: new Date(),
         userId: currentUser.uid,
         projectId: projectId,
+        domain: userDomain,
       });
       setNewNote('');
     }

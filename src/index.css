@@ -195,38 +195,50 @@
 
 .task-marker {
   color: white;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: break-word;
   font-size: 12px;
-  padding: 2px 4px;
-  margin-bottom: 2px;
+  padding: 3px 5px;
+  margin-bottom: 3px;
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  min-height: 28px;
+  flex-direction: column;
+  min-height: 32px;
+  max-height: 64px; /* Limit the maximum height */
 }
 
 .task-marker .font-bold {
   font-weight: bold;
-  margin-right: 4px;
+  margin-bottom: 2px;
+  font-size: 14px; /* Increase font size for task name */
 }
 
 .task-marker .task-description {
-  font-size: 11px;
+  font-size: 12px; /* Increase font size for task description */
   opacity: 0.9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
 }
 
 @media print {
   .task-marker {
-    font-size: 8px !important;
-    min-height: 20px !important;
+    font-size: 9px !important;
+    min-height: 24px !important;
+    padding: 2px 4px !important;
+    max-height: 48px !important;
+  }
+
+  .task-marker .font-bold {
+    font-size: 10px !important;
   }
 
   .task-marker .task-description {
-    font-size: 7px !important;
+    font-size: 8px !important;
   }
 }
 
@@ -343,125 +355,34 @@
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 14px;
-  padding: 4px 8px;
-  margin-bottom: 4px;
-  min-height: 28px;
+  word-break: break-word;
+  font-size: 12px;
+  padding: 3px 5px;
+  margin-bottom: 3px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  min-height: 32px;
 }
 
-.calendar-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.calendar-controls button {
-  background-color: #4a5568;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-}
-
-.pdf-calendar {
-  font-size: 10px;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.pdf-calendar .calendar {
-  border: 1px solid #ddd;
-}
-
-.pdf-calendar .weekdays {
-  display: flex;
-  background-color: #f0f0f0;
-  font-weight: bold;
-}
-
-.pdf-calendar .weekdays > div {
-  flex: 1;
-  text-align: center;
-  padding: 5px;
-}
-
-.pdf-calendar .week {
-  display: flex;
-  min-height: 80px;
-}
-
-.pdf-calendar .day-cell {
-  flex: 1;
-  border: 1px solid #ddd;
-  padding: 2px;
-  min-height: 80px;
-  overflow: hidden;
-}
-
-.pdf-calendar .day-number {
+.task-marker .font-bold {
   font-weight: bold;
   margin-bottom: 2px;
 }
 
-.pdf-calendar .holiday-marker {
-  background-color: red;
-  color: white;
-  padding: 1px;
-  font-size: 8px;
-  margin-bottom: 1px;
-  border-radius: 2px;
-}
-
-.pdf-calendar .task-marker {
-  color: white;
-  padding: 1px;
-  font-size: 8px;
-  margin-bottom: 1px;
-  border-radius: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.task-marker .task-description {
+  font-size: 10px;
+  opacity: 0.9;
 }
 
 @media print {
-  .container {
-    width: 100%;
-    max-width: none;
-  }
-
-  .print\:hidden {
-    display: none !important;
-  }
-
-  .calendar {
-    page-break-inside: avoid;
-  }
-
-  .day-cell {
-    min-height: 120px; /* Increase the minimum height for PDF */
-  }
-
   .task-marker {
-    font-size: 10px !important;
-    padding: 3px 5px !important;
-    margin-bottom: 2px !important;
-    min-height: 16px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    font-size: 9px !important;
+    min-height: 24px !important;
+    padding: 2px 4px !important;
   }
 
   .task-marker .task-description {
-    font-size: 7px !important;
-  }
-
-  .holiday-marker {
-    font-size: 10px !important;
-    padding: 1px 2px !important;
+    font-size: 8px !important;
   }
 }
 
@@ -600,5 +521,52 @@
   .holiday-marker {
     font-size: 10px !important;
     padding: 1px 2px !important;
+  }
+}
+
+.task-marker {
+  border-radius: 3px;
+  cursor: pointer;
+  word-break: break-word;
+}
+
+.task-description {
+  opacity: 0.8;
+}
+
+@media print {
+  .task-marker {
+    page-break-inside: avoid;
+  }
+}
+
+.day-cell {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 5px;
+  min-height: 120px;
+  max-height: 200px; /* Limit the maximum height */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Hide overflow content */
+}
+
+.tasks-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: calc(100% - 30px); /* Adjust based on day number and holiday marker height */
+}
+
+@media (min-width: 640px) {
+  .task-marker {
+    font-size: 14px;
+  }
+
+  .task-marker .font-bold {
+    font-size: 16px;
+  }
+
+  .task-marker .task-description {
+    font-size: 14px;
   }
 }

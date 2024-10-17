@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useContractors } from '../contexts/ContractorContext';
 import { db } from '../firebase';
-import { collection, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc, query, where, getDocs } from 'firebase/firestore';
 import { Contractor } from '../types';
 
 const ContractorForm: React.FC = () => {
@@ -11,6 +11,20 @@ const ContractorForm: React.FC = () => {
   const [error, setError] = useState('');
   const { currentUser } = useAuth();
   const { contractors, setContractors } = useContractors();
+
+  useEffect(() => {
+    fetchContractors();
+  }, [currentUser]);
+
+  const fetchContractors = async () => {
+    if (currentUser) {
+      const userDomain = currentUser.email?.split('@')[1] || '';
+      const q = query(collection(db, 'contractors'), where('domain', '==', userDomain));
+      const querySnapshot = await getDocs(q);
+      const fetchedContractors = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Contractor));
+      setContractors(fetchedContractors);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -101,43 +101,46 @@ const Calendar: React.FC = () => {
   };
 
   const renderCalendarDay = (day: moment.Moment, tasksForDay: Task[], holidayForDay: Holiday | undefined, isPDF: boolean) => {
-    const taskHeight = isPDF ? 20 : 28; // Slightly reduced height
-    const cellHeight = Math.max(120, tasksForDay.length * taskHeight + 40);
+    const taskHeight = isPDF ? 24 : 32;
+    const cellHeight = Math.max(120, Math.min(200, tasksForDay.length * taskHeight + 40));
+
+    const truncateText = (text: string, maxLength: number) => {
+      return text.length > maxLength ? text.substring(0, maxLength - 3) + '...' : text;
+    };
 
     return (
       <div 
         key={day.format('YYYY-MM-DD')} 
         className={`day-cell ${day.month() !== currentDate.month() ? 'other-month' : ''} ${holidayForDay ? 'holiday' : ''}`}
-        style={{ minHeight: `${cellHeight}px`, height: '100%' }}
+        style={{ height: `${cellHeight}px` }}
       >
         <div className="day-number">{day.date()}</div>
         {holidayForDay && <div className="holiday-marker">{holidayForDay.name}</div>}
-        <div className="tasks-container" style={{ maxHeight: `${cellHeight - 30}px`, overflowY: 'auto' }}>
-          {tasksForDay.map(task => (
-            <div
-              key={task.id}
-              className="task-marker"
-              style={{ 
-                backgroundColor: contractors.find(c => c.id === task.contractorId)?.color || '#3174ad',
-                fontSize: isPDF ? '8px' : '12px',
-                padding: '2px 4px',
-                marginBottom: '2px',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                minHeight: isPDF ? '20px' : '28px',
-              }}
-              onClick={() => !isPDF && setSelectedTask(task)}
-            >
-              <span className="font-bold mr-1">{task.name}</span>
-              {task.description && (
-                <>
-                  <span className="mx-1">-</span>
-                  <span className="task-description">{task.description}</span>
-                </>
-              )}
-            </div>
-          ))}
+        <div className="tasks-container">
+          {tasksForDay.map(task => {
+            const maxNameLength = isPDF ? 20 : 25;
+            const maxDescLength = isPDF ? 25 : 35;
+            const truncatedName = truncateText(task.name, maxNameLength);
+            const truncatedDesc = task.description ? truncateText(task.description, maxDescLength) : '';
+
+            return (
+              <div
+                key={task.id}
+                className="task-marker"
+                style={{ 
+                  backgroundColor: contractors.find(c => c.id === task.contractorId)?.color || '#3174ad',
+                }}
+                onClick={() => !isPDF && setSelectedTask(task)}
+              >
+                <div className="font-bold">{truncatedName}</div>
+                {truncatedDesc && (
+                  <div className="task-description">
+                    {truncatedDesc}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     );

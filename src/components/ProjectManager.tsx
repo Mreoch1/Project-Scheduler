@@ -68,7 +68,12 @@ const ProjectManager: React.FC = () => {
 
   const addProject = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newProjectName.trim() && currentUser) {
+    setError(null);
+    if (!newProjectName.trim()) {
+      setError('Please enter a project name.');
+      return;
+    }
+    if (currentUser) {
       try {
         setLoading(true);
         const userDomain = currentUser.email?.split('@')[1] || '';

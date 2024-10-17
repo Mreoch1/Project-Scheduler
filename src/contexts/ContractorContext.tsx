@@ -26,7 +26,8 @@ export const ContractorProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const fetchContractors = async () => {
     if (currentUser) {
-      const q = query(collection(db, 'contractors'), where('userId', '==', currentUser.uid));
+      const userDomain = currentUser.email?.split('@')[1] || '';
+      const q = query(collection(db, 'contractors'), where('domain', '==', userDomain));
       const querySnapshot = await getDocs(q);
       const fetchedContractors = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Contractor));
       setContractors(fetchedContractors);
